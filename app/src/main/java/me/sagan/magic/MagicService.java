@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -38,6 +39,9 @@ public class MagicService extends HiddenCameraService {
     private static final int NOTIFICATION_ID = 1;
     public static WindowManager mWindowManager;
     public static MonitorView mMonitorView;
+    final Handler handler = new Handler();
+    Runnable runnable;
+    int delay = 5000;
     private void showForegroundNotification(String contentText) {
         // Create intent that will bring our app to the front, as if it was tapped in the app
         // launcher
@@ -118,6 +122,7 @@ public class MagicService extends HiddenCameraService {
                 new VolumeProvider(VolumeProvider.VOLUME_CONTROL_RELATIVE, 100, 50) {
                     @Override
                     public void onAdjustVolume(int direction) {
+                       takeSnapshot();
                         //  -1 -- volume down, 1 -- volume up, 0 -- volume button released
                         Log.d("fuck", "volume press " + direction);
                         if (direction != 0) {
@@ -127,6 +132,7 @@ public class MagicService extends HiddenCameraService {
                 };
 
         mediaSession.setPlaybackToRemote(myVolumeProvider);
+
         mediaSession.setActive(true);
 
         showForegroundNotification("Magic Service running");
@@ -137,7 +143,16 @@ public class MagicService extends HiddenCameraService {
         Log.d("fuck", "--service start");
         return START_STICKY;
     }
-
+    private void takeSnapshot(){
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                takePicture();
+                Log.d("msg","Took Photo");
+                takeSnapshot();
+            }
+        },delay);
+    }
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
