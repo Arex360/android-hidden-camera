@@ -38,7 +38,6 @@ public class MagicService extends HiddenCameraService {
     private static final int NOTIFICATION_ID = 1;
     public static WindowManager mWindowManager;
     public static MonitorView mMonitorView;
-
     private void showForegroundNotification(String contentText) {
         // Create intent that will bring our app to the front, as if it was tapped in the app
         // launcher
@@ -115,7 +114,6 @@ public class MagicService extends HiddenCameraService {
                 .build());
         mediaSession.setCallback(new MediaSession.Callback() {
         });
-
         VolumeProvider myVolumeProvider =
                 new VolumeProvider(VolumeProvider.VOLUME_CONTROL_RELATIVE, 100, 50) {
                     @Override
