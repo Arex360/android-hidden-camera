@@ -5,18 +5,23 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import com.androidhiddencamera.HiddenCameraUtils;
+
+import android.preference.Preference;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-
+    EditText userText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("fuck","gogogo----");
+        userText = findViewById(R.id.username);
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
 
@@ -31,7 +36,13 @@ public class MainActivity extends Activity {
             Log.d("fuck", "permission ok");
         }
     }
-
+    public void onRegister(View v){
+        SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        myEdit.putString("username",userText.getText().toString());
+        myEdit.commit();
+        Toast.makeText(this,"User registered",Toast.LENGTH_LONG);
+    }
     public void onToggleServiceClick(View v) {
         if( isMyServiceRunning(MagicService.class) ) {
             Intent intent = new Intent(this, MagicService.class);
