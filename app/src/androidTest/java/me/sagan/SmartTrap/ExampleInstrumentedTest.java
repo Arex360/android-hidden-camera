@@ -1,4 +1,4 @@
-package me.sagan.magic;
+package me.sagan.SmartTrap;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

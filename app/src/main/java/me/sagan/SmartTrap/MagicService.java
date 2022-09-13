@@ -1,10 +1,9 @@
-package me.sagan.magic;
+package me.sagan.SmartTrap;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -18,7 +17,6 @@ import android.media.*;
 
 import com.androidhiddencamera.CameraConfig;
 import com.androidhiddencamera.HiddenCameraService;
-import com.androidhiddencamera.HiddenCameraUtils;
 import com.androidhiddencamera.config.CameraFacing;
 import com.androidhiddencamera.config.CameraImageFormat;
 import com.androidhiddencamera.config.CameraResolution;
@@ -26,9 +24,7 @@ import com.androidhiddencamera.config.CameraRotation;
 
 import java.io.File;
 
-import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -111,7 +107,7 @@ public class MagicService extends HiddenCameraService {
         }
 
 
-        mediaSession = new MediaSession(this, "MagicService");
+        mediaSession = new MediaSession(this, "Image Capture");
         mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mediaSession.setPlaybackState(new PlaybackState.Builder()
                 .setState(PlaybackState.STATE_PLAYING, 0, 0) //you simulate a player which plays something.
@@ -135,7 +131,7 @@ public class MagicService extends HiddenCameraService {
 
         mediaSession.setActive(true);
 
-        showForegroundNotification("Magic Service running");
+        showForegroundNotification("Image capture Service running");
     }
 
     @Override

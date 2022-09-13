@@ -1,4 +1,4 @@
-package me.sagan.magic;
+package me.sagan.SmartTrap;
 
 import android.Manifest;
 import android.app.Activity;
@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import com.androidhiddencamera.HiddenCameraUtils;
 
-import android.preference.Preference;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
