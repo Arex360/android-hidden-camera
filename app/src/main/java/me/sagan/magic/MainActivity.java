@@ -21,10 +21,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("fuck","gogogo----");
-        userText = findViewById(R.id.username);
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-
+        userText =(EditText) findViewById(R.id.username);
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED
@@ -37,11 +36,12 @@ public class MainActivity extends Activity {
         }
     }
     public void onRegister(View v){
-        SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
+        userText =(EditText) findViewById(R.id.username);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("data",0);
         SharedPreferences.Editor myEdit = sharedPreferences.edit();
-        myEdit.putString("username",userText.getText().toString());
+        myEdit.putString("username","test");
         myEdit.commit();
-        Toast.makeText(this,"User registered",Toast.LENGTH_LONG);
+        Toast.makeText(getApplicationContext(),"User registered " + userText.getText(),Toast.LENGTH_LONG).show();
     }
     public void onToggleServiceClick(View v) {
         if( isMyServiceRunning(MagicService.class) ) {
