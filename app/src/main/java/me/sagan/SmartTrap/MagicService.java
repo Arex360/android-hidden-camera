@@ -37,7 +37,7 @@ public class MagicService extends HiddenCameraService {
     public static MonitorView mMonitorView;
     final Handler handler = new Handler();
     Runnable runnable;
-    int delay = 5000;
+    int delay = 1000*15;
     private void showForegroundNotification(String contentText) {
         // Create intent that will bring our app to the front, as if it was tapped in the app
         // launcher
